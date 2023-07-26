@@ -1,25 +1,19 @@
 version: "3.9"
 services:
-  mongodb:
+  apirecetas:
+    build: .
+    ports:
+      - "3000:3000"
+    links:
+      - mongo_recetas
+  mongo_recetas:
     image: mongo
-    container_name: mongoRecetas
     ports:
       - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: poli
-      MONGO_INITDB_ROOT_PASSWORD: password
+      - MONGO_INITDB_ROOT_USERNAME=poli
+      - MONGO_INITDB_ROOT_PASSWORD=password
     volumes:
-      - mongo-data: /data/db
-
-  apiRecetas:
-    build: .
-    container_name: apiRecetas
-    ports:
-      - "3000:3000"
-    depends_on:
-      - mongodb
-    environment:
-      MONGO_URL: mongodb://poli:password@mongodb:27017/recipes?authSource=admin
-
+      - mongo-data:/data/db
 volumes:
   mongo-data:
